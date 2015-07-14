@@ -46,6 +46,15 @@ namespace :composer do
     end
 end
 
+namespace :php5 do
+    desc 'Restart php5'
+        task :restart do
+            on roles(:web) do
+            execute :sudo, :service, "php5-fpm restart"
+        end
+    end
+end
+
 namespace :deploy do
 
   after :restart, :clear_cache do
@@ -60,3 +69,7 @@ namespace :deploy do
   after :updated, "composer:install"
 
 end
+
+after "deploy",   "php5:restart"
+
+
