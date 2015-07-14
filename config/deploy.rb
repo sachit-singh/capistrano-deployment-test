@@ -34,6 +34,18 @@ set :deploy_to, '/home/vagrant/www/app/'
 # Default value for keep_releases is 5
 # set :keep_releases, 5
 
+namespace :composer do
+    desc "Running Composer Install"
+    task :install do
+        on roles(:app) do
+            within release_path do
+                execute :composer, "install --no-dev --quiet"
+                execute :composer, "dumpautoload"
+            end
+        end
+    end
+end
+
 namespace :deploy do
 
   after :restart, :clear_cache do
@@ -44,5 +56,7 @@ namespace :deploy do
       # end
     end
   end
+
+  after :updated, "composer:install"
 
 end
