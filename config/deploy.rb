@@ -3,16 +3,16 @@ lock '3.4.0'
 
 set :application, 'test-capistrano'
 set :repo_url, 'https://github.com/shhetri/capistrano-deployment-test.git'
-set :deploy_to, '/home/vagrant/www/app/'
+set :deploy_to, '/home/vagrant/www/app/staging'
 
 namespace :environment do
     desc "Set environment variables"
     task :set_variables do
         on roles(:app) do
               puts ("--> Create enviroment configuration file")
-              execute "cat /dev/null > .env"
-              execute "echo APP_DEBUG=#{fetch(:app_debug)} >> #{app_path}/.env"
-              execute "echo APP_KEY=#{fetch(:app_key)} >> #{app_path}/.env"
+              execute "cat /dev/null > #{fetch(:app_path)}/.env"
+              execute "echo APP_DEBUG=#{fetch(:app_debug)} >> #{fetch(:app_path)}/.env"
+              execute "echo APP_KEY=#{fetch(:app_key)} >> #{fetch(:app_path)}/.env"
         end
     end
 end
@@ -40,7 +40,7 @@ end
 
 namespace :deploy do
   after :updated, "composer:install"
-  after :updated, "environment:set_variables"
+  after :finished, "environment:set_variables"
 end
 
 after "deploy",   "php5:restart"
