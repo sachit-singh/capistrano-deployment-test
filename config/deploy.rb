@@ -1,6 +1,6 @@
 # config valid only for current version of Capistrano
 lock '3.4.0'
-
+# testing SBS
 set :application, 'test-capistrano'
 set :repo_url, 'https://github.com/shhetri/capistrano-deployment-test.git'
 set :deploy_to, '/home/vagrant/www/app/staging'
